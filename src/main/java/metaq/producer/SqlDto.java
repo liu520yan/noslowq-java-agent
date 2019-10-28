@@ -126,6 +126,19 @@ public class SqlDto implements Serializable {
     public void setDbInfo(DbInfo dbInfo) {
         this.dbInfo = dbInfo;
     }
-    
 
+    @Override
+    public String toString() {
+        return "SqlDto{" +
+                "sql='" + sql + '\'' +
+                ", originalSql='" + originalSql + '\'' +
+                ", appId=" + appId +
+                ", appName='" + appName + '\'' +
+                ", label='" + label + '\'' +
+                ", createdTime=" + createdTime +
+                ", costedTime=" + costedTime +
+                ", dbInfo=" + dbInfo +
+                ", trace='" + trace + '\'' +
+                '}';
+    }
 }

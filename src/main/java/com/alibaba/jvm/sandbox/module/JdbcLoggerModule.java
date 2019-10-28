@@ -10,7 +10,6 @@ import com.alibaba.jvm.sandbox.api.listener.ext.EventWatchBuilder;
 import com.alibaba.jvm.sandbox.api.resource.ModuleEventWatcher;
 import metaq.producer.DbInfo;
 import metaq.producer.SqlDto;
-import metaq.producer.SqlProducer;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.kohsuke.MetaInfServices;
@@ -25,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
 import java.util.logging.Logger;
 
 
@@ -44,7 +44,6 @@ public class JdbcLoggerModule implements Module, LoadCompleted {
 
     @Override
     public void loadCompleted() {
-
         monitorJavaSqlPreparedStatement();
     }
 
@@ -52,7 +51,7 @@ public class JdbcLoggerModule implements Module, LoadCompleted {
     private void monitorJavaSqlPreparedStatement() {
 
         new EventWatchBuilder(moduleEventWatcher)
-                .onClass("com.mysql.jdbc.PreparedStatement")
+                .onClass("java.sql.PreparedStatement")
                 .includeSubClasses()
                 .onBehavior("fillSendPacket")
                 .withParameterTypes(byte[][].class, InputStream[].class, boolean[].class,
@@ -90,7 +89,7 @@ public class JdbcLoggerModule implements Module, LoadCompleted {
                                     return;
                                 }
                                 SqlDto sqlDto = new SqlDto(buildsql, originalSql, 0, appNAME, env, System.currentTimeMillis(), 1L, TraceHelper.getTrace(), dbInfo);
-                                SqlProducer.get().send(sqlDto);
+                                System.out.println(sqlDto);
                             } catch (IllegalAccessException e) {
                                 logger.severe(e.getMessage());
                             }
